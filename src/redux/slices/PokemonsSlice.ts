@@ -11,18 +11,24 @@ const initialState: PokenomInitType = {
     pokemons: []
 }
 
+let url;
+
 const loadPokemons = createAsyncThunk(
     'pokemonsSlice/loadPokemons',
     async (_, thunkAPI) => {
         try{
             const responce = await services.getAllPokemons();
+            let url = thunkAPI.fulfillWithValue(responce.results.map(res => res.url));
             return thunkAPI.fulfillWithValue(responce.results)
+
         } catch (e){
             const error = e as AxiosError;
             return thunkAPI.rejectWithValue(error)
         }
     }
 )
+
+console.log(url)
 
 export const  pokemonsSlice = createSlice({
     name: 'pokemonsSlice',
